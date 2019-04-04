@@ -11,6 +11,8 @@
     <h1>Au long loin du long couloir ...</h1>
     <main>
         <% for(let item of data){%>
+            
+            <form action="/api/update-posts/<%=item._id %>" method="POST">
             <article>
                     <textarea name="title"><%= item.title %></textarea>
                 <p><%= item.type %></p>
@@ -20,7 +22,6 @@
                         <option value="TXT">TXT</option>
                 </select>   
             </article>
-            <form action="/api/update-posts/<%=item._id %>" method="POST">
                 <button type="submit">Modifier</button>  
             </form>  
  

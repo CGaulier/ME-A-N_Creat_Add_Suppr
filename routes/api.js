@@ -124,31 +124,32 @@ router.get( '/posts', (req, res) => {
 
 //
 
-    //Créer une route API pour ajouter un article
-    router.post('/update-posts', (req,res)=>{
-        console.log(req.body);
-        mongoose.connect(mongoServeur, (err, db)=>{
-            //Tester ma connexion
-            if(err){ res.render('update-posts', {msg:err}) }
-            else{
-                //Connexion ouverte : ajouter les données dans la BDD
-                db.collection('posts').update({ 
-                    title: req.body.title, 
-                   type:req.body.type}, (err, newObject)=>{
-                    //Verifier l'ajout
-                    if(err){res.redirect(500,'/') }
-                    else{
-                        res.redirect(301, '/')
-                    }
-                })
-            };
-    
-            //Fermer la connexion
-            db.close();
-    
-        })
-    })
+router.post('/update-posts/:id', (req,res)=>{
+    console.log(req.body);
+    mongoose.connect(mongoServeur, (err, db)=>{
+        //Tester ma connexion
+        if(err){ res.render('update-posts', {msg:err}) }
+        else{
+            //Connexion ouverte : ajouter les données dans la BDD
+            db.collection('posts').updateOne({ 
+                _id: new ObjectId(req.params.id)},
+                { $set: { 
+                        title: req.body.title,
+                        type: req.body.type
+                     }
+                }, (err, newObject)=>{
+                //Verifier l'ajout
+                if(err){res.redirect(500,'/') }
+                else{
+                    res.redirect(301,'/')
+                }
+            })
+        };
+        //Fermer la connexion
+        db.close();
 
+    })
+})
 
 
 
